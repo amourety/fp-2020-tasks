@@ -8,7 +8,10 @@ import Part2.Types
 -- Написать функцию, которая преобразует значение типа
 -- ColorLetter в символ, равный первой букве значения
 prob6 :: ColorLetter -> Char
-prob6 = error "Implement me!"
+prob6 cl = case cl of
+    RED -> 'R'
+    GREEN -> 'G'
+    BLUE -> 'B'
 
 ------------------------------------------------------------
 -- PROBLEM #7
@@ -16,7 +19,10 @@ prob6 = error "Implement me!"
 -- Написать функцию, которая проверяет, что значения
 -- находятся в диапазоне от 0 до 255 (границы входят)
 prob7 :: ColorPart -> Bool
-prob7 = error "Implement me!"
+prob7 c = case c of
+  Red x -> x >= 0 && x < 255
+  Green x -> x >= 0 && x < 255
+  Blue x -> x >= 0 && x < 255
 
 ------------------------------------------------------------
 -- PROBLEM #8
@@ -24,7 +30,10 @@ prob7 = error "Implement me!"
 -- Написать функцию, которая добавляет в соответствующее
 -- поле значения Color значение из ColorPart
 prob8 :: Color -> ColorPart -> Color
-prob8 = error "Implement me!"
+prob8 c p = case p of
+  Red x -> c {red = red c + x}
+  Green x -> c {green = green c + x}
+  Blue x -> c {blue = blue c + x}
 
 ------------------------------------------------------------
 -- PROBLEM #9
@@ -32,7 +41,10 @@ prob8 = error "Implement me!"
 -- Написать функцию, которая возвращает значение из
 -- ColorPart
 prob9 :: ColorPart -> Int
-prob9 = error "Implement me!"
+prob9 c = case c of
+  Red x -> x
+  Green x -> x
+  Blue x -> x
 
 ------------------------------------------------------------
 -- PROBLEM #10
@@ -40,14 +52,23 @@ prob9 = error "Implement me!"
 -- Написать функцию, которая возвращает компонент Color, у
 -- которого наибольшее значение (если такой единственный)
 prob10 :: Color -> Maybe ColorPart
-prob10 = error "Implement me!"
+prob10 c | red c > green c && red c > blue c = Just  (Red (red c))
+         | green c > red c && green c > blue c = Just  (Green (green c))
+         | blue c > red c && blue c > green c = Just  (Blue (blue c))
+prob10 c = Nothing
 
 ------------------------------------------------------------
 -- PROBLEM #11
 --
 -- Найти сумму элементов дерева
 prob11 :: Num a => Tree a -> a
-prob11 = error "Implement me!"
+prob11 t = sum (convertToList t)
+
+convertToList :: Tree a -> [a]
+convertToList tree = [root tree] ++ maybeConvert (left tree) ++ maybeConvert (right tree)
+  where
+    maybeConvert (Just x) = convertToList x
+    maybeConvert Nothing = []
 
 ------------------------------------------------------------
 -- PROBLEM #12
@@ -58,7 +79,18 @@ prob11 = error "Implement me!"
 -- а все элементы правого поддерева -- не меньше элемента
 -- в узле)
 prob12 :: Ord a => Tree a -> Bool
-prob12 = error "Implement me!"
+prob12 = checkTree
+
+checkTree :: Ord a => Tree a -> Bool
+checkTree tree = checkLeft (left tree) (root tree) && checkRight (right tree) (root tree)
+
+checkRight :: Ord a => Maybe (Tree a) -> a -> Bool
+checkRight Nothing x = True
+checkRight (Just tree) parent = root tree >= parent && checkTree tree
+
+checkLeft :: Ord a => Maybe (Tree a) -> a -> Bool
+checkLeft Nothing x = True
+checkLeft (Just tree) parent = root tree < parent && checkTree tree
 
 ------------------------------------------------------------
 -- PROBLEM #13
