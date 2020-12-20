@@ -99,7 +99,14 @@ checkLeft (Just tree) parent = root tree < parent && checkTree tree
 -- поддерево, в корне которого находится значение, если оно
 -- есть в дереве поиска; если его нет - вернуть Nothing
 prob13 :: Ord a => a -> Tree a -> Maybe (Tree a)
-prob13 = error "Implement me!"
+prob13 v tree = search v (Just tree)
+
+search :: Ord a => a -> Maybe (Tree a) -> Maybe (Tree a)
+search _ Nothing = Nothing
+search value t@(Just (Tree l root r))
+    | value == root = t
+    | value < root = search value l
+    | value > root = search value r
 
 ------------------------------------------------------------
 -- PROBLEM #14
@@ -107,7 +114,16 @@ prob13 = error "Implement me!"
 -- Заменить () на числа в порядке обхода "правый, левый,
 -- корень", начиная с 1
 prob14 :: Tree () -> Tree Int
-prob14 = error "Implement me!"
+prob14 t = case enumerate (Just t) 1 of
+    (Just enumerated, _) -> enumerated
+
+enumerate :: Maybe (Tree ()) -> Int -> (Maybe (Tree Int), Int)
+enumerate Nothing i = (Nothing, i)
+enumerate (Just (Tree l () r)) i = (Just $ Tree l' current r', current + 1)
+    where
+        (r', afterRight) = enumerate r i
+        (l', afterLeft) = enumerate l afterRight
+        current = afterLeft
 
 ------------------------------------------------------------
 -- PROBLEM #15
@@ -115,7 +131,8 @@ prob14 = error "Implement me!"
 -- Выполнить вращение дерева влево относительно корня
 -- (https://en.wikipedia.org/wiki/Tree_rotation)
 prob15 :: Tree a -> Tree a
-prob15 = error "Implement me!"
+prob15 (Tree a p (Just (Tree b q c))) = Tree (Just $ Tree a p b) q c
+prob15 _ = error "Tree has too few nodes to rotate"
 
 ------------------------------------------------------------
 -- PROBLEM #16
@@ -123,7 +140,8 @@ prob15 = error "Implement me!"
 -- Выполнить вращение дерева вправо относительно корня
 -- (https://en.wikipedia.org/wiki/Tree_rotation)
 prob16 :: Tree a -> Tree a
-prob16 = error "Implement me!"
+prob16 (Tree (Just (Tree a p b)) q c) = Tree a p (Just $ Tree b q c)
+prob16 _ = error "Tree has too few nodes to rotate"
 
 ------------------------------------------------------------
 -- PROBLEM #17

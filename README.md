@@ -33,17 +33,17 @@ Part1.hs
 --------------------
 Part2.hs
 
-- [ ] PROBLEM #6
-- [ ] PROBLEM #7
-- [ ] PROBLEM #8
-- [ ] PROBLEM #9
-- [ ] PROBLEM #10
-- [ ] PROBLEM #11
-- [ ] PROBLEM #12
-- [ ] PROBLEM #13
-- [ ] PROBLEM #14
-- [ ] PROBLEM #15
-- [ ] PROBLEM #16
+- [X] PROBLEM #6
+- [X] PROBLEM #7
+- [X] PROBLEM #8
+- [X] PROBLEM #9
+- [X] PROBLEM #10
+- [X] PROBLEM #11
+- [X] PROBLEM #12
+- [X] PROBLEM #13
+- [X] PROBLEM #14
+- [X] PROBLEM #15
+- [X] PROBLEM #16
 - [ ] PROBLEM #17
 
 --------------------
