@@ -8,10 +8,9 @@ import Part2.Types
 -- Написать функцию, которая преобразует значение типа
 -- ColorLetter в символ, равный первой букве значения
 prob6 :: ColorLetter -> Char
-prob6 cl = case cl of
-    RED -> 'R'
-    GREEN -> 'G'
-    BLUE -> 'B'
+prob6 RED = 'R'
+prob6 GREEN = 'G'
+prob6 BLUE = 'B'
 
 ------------------------------------------------------------
 -- PROBLEM #7
@@ -62,13 +61,14 @@ prob10 c = Nothing
 --
 -- Найти сумму элементов дерева
 prob11 :: Num a => Tree a -> a
-prob11 t = sum (convertToList t)
+prob11 tree =
+    root tree +
+    fmap prob11 (left tree) `orElse` 0 +
+    fmap prob11 (right tree) `orElse` 0
 
-convertToList :: Tree a -> [a]
-convertToList tree = [root tree] ++ maybeConvert (left tree) ++ maybeConvert (right tree)
-  where
-    maybeConvert (Just x) = convertToList x
-    maybeConvert Nothing = []
+orElse :: Maybe a -> a -> a
+orElse (Just x) _ = x
+orElse Nothing x = x
 
 ------------------------------------------------------------
 -- PROBLEM #12
