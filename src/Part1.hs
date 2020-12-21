@@ -73,10 +73,14 @@ prob3 step n = recursive n 0
 --
 -- Число n по модулю не превосходит 10^5
 prob4 :: Integer -> Integer
-prob4 0 = 1
-prob4 1 = 1
-prob4 n | n > 1 = prob4 (n - 2) + prob4 (n - 1)
-        | n < 0 = prob4 (n + 2) - prob4 (n + 1)
+prob4 n
+  | n == (-1) = 0
+  | n < 0 = prob4 (-n - 2) * (if even n then 1 else -1)
+  | otherwise = prob4iter n 0 1
+
+prob4iter :: Integer -> Integer -> Integer -> Integer
+prob4iter 0 a b = b
+prob4iter i a b = prob4iter (i - 1) b (a + b)
 
 
 ------------------------------------------------------------
