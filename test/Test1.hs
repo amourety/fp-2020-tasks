@@ -34,9 +34,6 @@ test3 = testGroup "P03"
   , testCase "prob3 prob2 3 == 7" $ prob3 prob2 3 @?= 7
   ]
 
--- -7 -6 -5 -4 -3 -2 -1 0 1 2 3 4 5 6  7
--- -8  5 -3  2 -1  1  0 1 1 2 3 5 8 13 21
-
 test4 :: TestTree
 test4 = testGroup "P04"
   [ testCase "prob4 0 == 1" $ prob4 0 @?= 1
