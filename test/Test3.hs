@@ -30,6 +30,13 @@ test18 :: TestTree
 test18 = testGroup "P18"
   [ testCase "prob18 17 == T" $ prob18 17 @?= True
   , testCase "prob18 1 == F" $ prob18 1 @?= False
+  , testCase "prob18 2 == T" $ prob18 2 @?= True
+  , testCase "prob18 3 == T" $ prob18 3 @?= True
+  , testCase "prob18 4 == T" $ prob18 4 @?= False
+  , testCase "prob18 5 == T" $ prob18 5 @?= True
+  , testCase "prob18 6 == T" $ prob18 6 @?= False
+  , testCase "prob18 7 == T" $ prob18 7 @?= True
+  , testCase "prob18 8 == T" $ prob18 8 @?= False
   ]
 
 test19 :: TestTree
@@ -38,6 +45,7 @@ test19 = testGroup "P19"
   , testCase "prob19 1 == []" $ prob19 1 @?= []
   , testCase "prob19 2020 == [(2,2),(5,1),(101,1)]" $
     prob19 2020 @?= [(2,2),(5,1),(101,1)]
+  , testCase "prob19 1024 == [(2,10)]" $ prob19 1024 @?= [(2,10)]
   ]
 
 test20 :: TestTree
@@ -74,6 +82,10 @@ test23 = testGroup "P23"
     prob23 "100-120: 1" @?= Nothing
   , testCase "prob23 \"5-3: abcde\" == \"edc\"" $
     prob23 "5-3: abcde" @?= Just "edc"
+  , testCase "prob23 \"1-5: abcde\" == \"abcde\"" $
+    prob23 "1-5: abcde" @?= Just "abcde"
+  , testCase "prob23 \"5-1: abcde\" == \"edcba\"" $
+    prob23 "5-1: abcde" @?= Just "edcba"
   ]
 
 test24 :: TestTree
@@ -137,6 +149,6 @@ test31 = testGroup "P31"
 
 test32 :: TestTree
 test32 = testGroup "P32"
-  [ testCase "prob32 [2,3,5] 10 == [5+5, 5+3+2, 3+3+2+2]" $
-    prob32 [2,3,5] 10 @?= [[5,5],[5,3,2],[3,3,2,2]]
+  [ testCase "prob32 [2,3,5] 10 == [5+5, 5+3+2, 3+3+2+2, 2+2+2+2+2]" $
+    prob32 [2,3,5] 10 @?= [[5,5],[5,3,2],[3,3,2,2],[2,2,2,2,2]]
   ]
