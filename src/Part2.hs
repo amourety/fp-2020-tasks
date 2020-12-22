@@ -2,6 +2,10 @@ module Part2 where
 
 import Part2.Types
 
+import Data.Function ((&))
+import Data.List (find)
+import Control.Monad (msum)
+
 ------------------------------------------------------------
 -- PROBLEM #6
 --
@@ -128,20 +132,22 @@ enumerate (Just (Tree l () r)) i = (Just $ Tree l' current r', current + 1)
 ------------------------------------------------------------
 -- PROBLEM #15
 --
--- Выполнить вращение дерева влево относительно корня
--- (https://en.wikipedia.org/wiki/Tree_rotation)
 prob15 :: Tree a -> Tree a
-prob15 (Tree a p (Just (Tree b q c))) = Tree (Just $ Tree a p b) q c
-prob15 _ = error "Tree has too few nodes to rotate"
+prob15 tree = maybe tree leftRotation $ tree & right
+    where
+        leftRotation rightSubTree = rightSubTree { left = Just oldRoot }
+            where
+                oldRoot = tree { right = rightSubTree & left }
 
 ------------------------------------------------------------
 -- PROBLEM #16
---
--- Выполнить вращение дерева вправо относительно корня
--- (https://en.wikipedia.org/wiki/Tree_rotation)
+
 prob16 :: Tree a -> Tree a
-prob16 (Tree (Just (Tree a p b)) q c) = Tree a p (Just $ Tree b q c)
-prob16 _ = error "Tree has too few nodes to rotate"
+prob16 tree = maybe tree rightRotation $ tree & left
+    where
+        rightRotation leftSubTree = leftSubTree { right = Just oldRoot }
+            where
+                oldRoot = tree { left = leftSubTree & right }
 
 ------------------------------------------------------------
 -- PROBLEM #17
@@ -150,4 +156,59 @@ prob16 _ = error "Tree has too few nodes to rotate"
 -- разница высот поддеревьев не превосходила по модулю 1
 -- (например, преобразовать в полное бинарное дерево)
 prob17 :: Tree a -> Tree a
-prob17 = error "Implement me!"
+prob17 tree
+    | isBalanced tree = tree
+    | otherwise = (prob17 . performRotations . handleSubTrees) tree
+    where
+        handleSubTrees :: Tree a -> Tree a
+        handleSubTrees currentTree = currentTree
+            {
+                left = do
+                    leftSubTree <- currentTree & left
+                    return $ prob17 leftSubTree,
+                right = do
+                    rightSubTree <- currentTree & right
+                    return $ prob17 rightSubTree
+            }
+
+        performRotations :: Tree a -> Tree a
+        performRotations currentTree
+            | isBalanced currentTree = currentTree
+
+            | getHeight (currentTree & left) - getHeight (currentTree & right) > 1 =
+                if getHeight (currentTree & left >>= left) > getHeight (currentTree & left >>= right)
+                then prob16 currentTree
+                else leftRightRotation currentTree
+
+            | otherwise =
+                if getHeight (currentTree & right >>= left) > getHeight (currentTree & right >>= right)
+                then rightLeftRotation currentTree
+                else prob15 currentTree
+
+isBalanced :: Tree a -> Bool
+isBalanced tree =
+    abs (getHeight (tree & left) - getHeight (tree & right)) <= 1
+    && maybe True isBalanced (tree & left)
+    && maybe True isBalanced (tree & right)
+
+getHeight :: Maybe (Tree a) -> Integer
+getHeight Nothing = 0
+getHeight (Just tree) = succ $ max
+    (getHeight $ tree & left)
+    (getHeight $ tree & right)
+
+rightLeftRotation :: Tree a -> Tree a
+rightLeftRotation tree = prob15 $ tree
+    {
+        right = do
+            rightSubTree <- tree & right
+            return $ prob16 rightSubTree
+    }
+
+leftRightRotation :: Tree a -> Tree a
+leftRightRotation tree = prob16 $ tree
+    {
+        left = do
+            leftSubTree <- tree & left
+            return $ prob15 leftSubTree
+    }

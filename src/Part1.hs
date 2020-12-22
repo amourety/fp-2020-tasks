@@ -6,6 +6,8 @@ module Part1
   , prob5
   ) where
 
+import Part3 (primeDivisors)
+
 ------------------------------------------------------------
 -- PROBLEM #1
 --
@@ -92,8 +94,4 @@ prob4iter i a b = prob4iter (i - 1) b (a + b)
 -- Числа n и k положительны и не превосходят 10^8.
 -- Число 1 не считается простым числом
 prob5 :: Integer -> Integer -> Bool
-prob5 n k = last ([p | p <- [2 .. n], n `mod` p == 0, [d | d <- [1 .. p], p `mod` d == 0] == [1, p]]) < k
-
-prime :: (Integral a) => a -> Bool
-prime 1 = False
-prime x = and [ x `mod` y /= 0 | y <- [2..(x-1)] ]
+prob5 n k = all (< k) (primeDivisors n)
